@@ -24,9 +24,9 @@ ACTIVATE_URL_PREFIX = 'http://{host}/{app_name}/mobile/activate/'.format(host=ap
 
 # 订单模板
 # excel文件
-ORDER_XLSX_TEMPLATE = '{base_dir}/{app_name}/excel_template/prod.xlsx'.format(base_dir=BASE_DIR, app_name=APP_NAME)
+ORDER_XLSX_TEMPLATE = '{base_dir}/{app_name}/excel/prod.xlsx'.format(base_dir=BASE_DIR, app_name=APP_NAME)
 # 生成的订单保存路径
-ORDER_OUTPUT_XLSX_DIR_PATH = '{base_dir}/{app_name}/output_xlsx/'.format(base_dir=BASE_DIR, app_name=APP_NAME)
+ORDER_OUTPUT_XLSX_DIR_PATH = '{base_dir}/{app_name}/excel/output/'.format(base_dir=BASE_DIR, app_name=APP_NAME)
 
 # 日志输出文件
 LOG_PATH = '{base_dir}/{app_name}/logs/pricer.txt'.format(base_dir=BASE_DIR, app_name=APP_NAME)
