@@ -33,7 +33,8 @@ class AdminDao(BaseDao):
         try:
             self.connect()
             with self._conn.cursor() as cursor:
-                cursor.execute("""set session transaction isolation level REPEATABLE READ;""")
+                cursor.execute(
+                    """set session transaction isolation level REPEATABLE READ;""")
                 sql = """insert into t_admin (用户名, 密码, 姓名, 电子邮箱, 联系方式, 激活码, 激活) values 
                  ('{tel}', '{pwd}', '{name}', '{email}', '{tel}', '{id_code}', 'n');""".format(**u)
                 cursor.execute(sql)

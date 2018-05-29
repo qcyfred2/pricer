@@ -23,13 +23,13 @@
                     <input type="text" name="name" id="name" placeholder="电话*" />
                 </p>
                 <!--<p class="list-group-item-text">-->
-                    <!--<input type="text" name="email" id="email" placeholder="E-mail*" />-->
+                <!--<input type="text" name="email" id="email" placeholder="E-mail*" />-->
                 <!--</p>-->
                 <p class="list-group-item-text">
                     <input type="submit" value="登录" onclick="return login()" />
                 </p>
                 <p class="" style="font-size: 10pt; ">
-                        <span style="color: red;">*</span>请将信息填写完整
+                    <span style="color: red;">*</span>请将信息填写完整
                 </p>
             </span>
 
@@ -58,11 +58,11 @@
         }
 
 
-/*        var email = $("input:text[name='email']").val();
-        if (email.length <= 0) {
-            return false;
-        }
-*/
+        /*        var email = $("input:text[name='email']").val();
+                if (email.length <= 0) {
+                    return false;
+                }
+        */
 
         var form = new FormData();
         form.append("csrfmiddlewaretoken", '{{ csrf_token }}');

@@ -5,8 +5,7 @@
 {% endblock %} {% block body %}
 
 
-<nav id="nav" class="navbar navbar-default navbar-fixed-bottom" role="navigation"
-style="height: 40px; line-height: 40px;">
+<nav id="nav" class="navbar navbar-default navbar-fixed-bottom" role="navigation" style="height: 40px; line-height: 40px;">
     <div class="text-right">
         <span class="">共计
             <a id="total_price">{{data.cart.total_price}}</a> 元</span>
@@ -41,7 +40,8 @@ style="height: 40px; line-height: 40px;">
                     {{prod.产品名称}} （{{prod.产品品牌}}）
                 </h4>
                 <p class="list-group-item-text">
-                    产品单价 <span id="unit_price_{{prod.产品编号}}">{{data.投标报价}}</span> {{prod.报价单位}}
+                    产品单价
+                    <span id="unit_price_{{prod.产品编号}}">{{data.投标报价}}</span> {{prod.报价单位}}
                 </p>
                 <p class="list-group-item-text">
                     预订数量 {{prod.预订数量}} {{prod.产品量词}}
@@ -75,22 +75,23 @@ style="height: 40px; line-height: 40px;">
 
     $(document).ready(function () {
 
-        data = {{ data.js_data | safe }};
-        cart = data.cart;
+        data = {{ data.js_data | safe }
+    };
+    cart = data.cart;
 
-        //console.log(cart);
+    //console.log(cart);
 
-        for(var o in cart) {
-            if (isNaN(o)) {
+    for (var o in cart) {
+        if (isNaN(o)) {
 
-            } else {
-                if (o>0) {
-                    var t = cart[o];
-                    var unit_px = $.parseJSON(t)['unit_price'];
-                    $('#unit_price_'+o).text(to_fixed(unit_px));
-                }
+        } else {
+            if (o > 0) {
+                var t = cart[o];
+                var unit_px = $.parseJSON(t)['unit_price'];
+                $('#unit_price_' + o).text(to_fixed(unit_px));
             }
         }
+    }
 
     });
 

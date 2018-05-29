@@ -16,7 +16,8 @@ class OrderDao(BaseDao):
     # 手机网页上查询订单
     def get_all_orders_by_admin_id(self, admin_id):
         if admin_id not in [1, 2, 3, 4]:  # 系统管理员编号
-            sql = """SELECT * FROM v_orders WHERE 客户经理编号 = {admin_id};""".format(admin_id=admin_id)
+            sql = """SELECT * FROM v_orders WHERE 客户经理编号 = {admin_id};""".format(
+                admin_id=admin_id)
         else:  # 系统管理员能查询所有订单
             sql = """SELECT * FROM v_orders;"""
         df = self.execute_df_query_by_sql(sql, idx_col='订单编号')
@@ -93,7 +94,8 @@ class OrderDao(BaseDao):
         try:
             self.connect()
             with self._conn.cursor() as cursor:
-                cursor.execute("""set session transaction isolation level REPEATABLE READ;""")
+                cursor.execute(
+                    """set session transaction isolation level REPEATABLE READ;""")
 
                 params = order_dict
                 if len(order_dict['cart']) < 4:  # 是3还是4？… -_-!
@@ -136,7 +138,8 @@ class OrderDao(BaseDao):
                     param2['order_id'] = order_id
                     param2['prod_id'] = prod_id
                     param2['price_unit'] = prods_dict[str(prod_id)]['报价单位']
-                    param2['prod_measure_word'] = prods_dict[str(prod_id)]['产品量词']
+                    param2['prod_measure_word'] = prods_dict[str(
+                        prod_id)]['产品量词']
                     param2 = dict(param2, **json.loads(oc[1]))
 
                     sql = """ insert into t_order_component ( 订单编号, 产品编号, 预定数量, 预定年限, 投标报价, 报价单位,

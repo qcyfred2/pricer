@@ -57,7 +57,8 @@ def send_email(receivers,  subject, content, images, attachments, cc=None):
         else:  # it's a dir
             files = os.listdir(image)
             for file in files:
-                msgImage = MIMEImage(open('{0}\{1}'.format(image, file), 'rb').read())
+                msgImage = MIMEImage(
+                    open('{0}\{1}'.format(image, file), 'rb').read())
                 msgImage.add_header('Content-ID', '<image' + str(count) + '>')
                 msg.attach(msgImage)
                 count += 1
@@ -66,13 +67,16 @@ def send_email(receivers,  subject, content, images, attachments, cc=None):
     for attachment in attachments:
         if attachment.find('.') != -1:  # it's a file
             att = MIMEApplication(open(attachment, 'rb').read())
-            att.add_header('Content-Disposition', 'attachment', filename=os.path.split(attachment)[1])
+            att.add_header('Content-Disposition', 'attachment',
+                           filename=os.path.split(attachment)[1])
             msg.attach(att)
         else:  # it's a dir
             files = os.listdir(attachment)
             for file in files:
-                att = MIMEApplication(open('{0}\{1}'.format(attachment, file), 'rb').read())
-                att.add_header('Content-Disposition', 'attachment', filename=file)
+                att = MIMEApplication(
+                    open('{0}\{1}'.format(attachment, file), 'rb').read())
+                att.add_header('Content-Disposition',
+                               'attachment', filename=file)
                 msg.attach(att)
 
     # send email to receivers

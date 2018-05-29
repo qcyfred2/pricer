@@ -31,8 +31,10 @@ urlpatterns = [
     # mobile's url
     # path('^hello/$', MobileView.as_view(), name="products_mobile"),
     # url(r'$', MobileView.as_view(), name='MobileView'),
-    url(r'^favicon.ico$', RedirectView.as_view(url='/static/images/favicon.ico')),
-    url(r'^ajax-loader.gif$', RedirectView.as_view(url='/static/images/ajax-loader.gif')),  # 有问题？？
+    url(r'^favicon.ico$', RedirectView.as_view(
+        url='/static/images/favicon.ico')),
+    url(r'^ajax-loader.gif$',
+        RedirectView.as_view(url='/static/images/ajax-loader.gif')),  # 有问题？？
 
 
     url(r'$', MobileView.as_view(), name='MobileView'),

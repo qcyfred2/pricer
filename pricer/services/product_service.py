@@ -38,10 +38,13 @@ class ProductService:
 
         if (prod_name != 'FC-SAN') and (prod_name != 'IP-SAN'):
             px_dict['unit_price'] = round(prod_df.loc[prod_id, '投标报价'], 2)
-            px_dict['product_price'] = round(px_dict['unit_price'] * quantity * year, 2)
+            px_dict['product_price'] = round(
+                px_dict['unit_price'] * quantity * year, 2)
         else:
-            px_dict['unit_price'] = round(self.calc_storage_price(prod_name, quantity) / quantity, 2)
-            px_dict['product_price'] = round(self.calc_storage_price(prod_name, quantity) * year, 2)
+            px_dict['unit_price'] = round(
+                self.calc_storage_price(prod_name, quantity) / quantity, 2)
+            px_dict['product_price'] = round(
+                self.calc_storage_price(prod_name, quantity) * year, 2)
 
         return px_dict
 

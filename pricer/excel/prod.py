@@ -11,6 +11,8 @@ from decimal import Decimal
 '''
 人民币数字转大写汉字
 '''
+
+
 @xw.func
 def cncurrency(value, capital=True, classical=True, prefix=False):
     '''
@@ -45,10 +47,12 @@ def cncurrency(value, capital=True, classical=True, prefix=False):
     dunit = ('角', '分')
     if capital:
         num = ('零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖')
-        iunit = [None, '拾', '佰', '仟', '万', '拾', '佰', '仟', '亿', '拾', '佰', '仟', '万', '拾', '佰', '仟']
+        iunit = [None, '拾', '佰', '仟', '万', '拾', '佰',
+                 '仟', '亿', '拾', '佰', '仟', '万', '拾', '佰', '仟']
     else:
         num = ('〇', '一', '二', '三', '四', '五', '六', '七', '八', '九')
-        iunit = [None, '十', '百', '千', '万', '十', '百', '千', '亿', '十', '百', '千', '万', '十', '百', '千']
+        iunit = [None, '十', '百', '千', '万', '十', '百',
+                 '千', '亿', '十', '百', '千', '万', '十', '百', '千']
 
     iunit[0] = '圆' if classical else '元'
     # 转换为Decimal，并截断多余小数
@@ -67,12 +71,12 @@ def cncurrency(value, capital=True, classical=True, prefix=False):
         # assert - value + value == 0
     # 转化为字符串
     s = str(value)
-    
+
     if len(s) > 19:
         return '金额太大了，不知道该怎么表达。'
 
     istr, dstr = s.split('.')  # 小数部分和整数部分分别处理
-    
+
     istr = istr[::-1]  # 翻转整数部分字符串
     so = []  # 用于记录转换结果
 

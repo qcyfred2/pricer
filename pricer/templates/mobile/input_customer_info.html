@@ -105,7 +105,7 @@
                 } else if (data.result == 1) {
                     var order_id = data.order_id;
                     alert('下单成功');
-                    location.href = "{{nginx_prefix}}/mobile/order_result/?order_id="+order_id; // 重定向
+                    location.href = "{{nginx_prefix}}/mobile/order_result/?order_id=" + order_id; // 重定向
                 }
                 else {
                     console.log('500');

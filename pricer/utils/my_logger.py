@@ -6,7 +6,8 @@ from pricer.constants import LOG_PATH
 
 
 infile = LOG_PATH
-handler = logging.handlers.RotatingFileHandler(infile, mode='a', maxBytes=10 * 1024 * 1024, backupCount=3, encoding='utf-8')
+handler = logging.handlers.RotatingFileHandler(
+    infile, mode='a', maxBytes=10 * 1024 * 1024, backupCount=3, encoding='utf-8')
 fmt = '%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s'
 
 formatter = logging.Formatter(fmt)

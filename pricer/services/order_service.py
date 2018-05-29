@@ -21,7 +21,7 @@ class OrderService:
     def __init__(self):
         self._order_dao = OrderDao()
         self._product_dao = ProductDao()
-       
+
     def get_all_orders_by_admin_id(self, admin_id):
         return self._order_dao.get_all_orders_by_admin_id(admin_id)
 
@@ -29,6 +29,7 @@ class OrderService:
     def get_all_orders_df(self):
         return self._order_dao.get_all_orders_df()
     # 网页上显示table
+
     def get_order_detail_df_by_order_id(self, order_id):
         return self._order_dao.get_order_detail_df_by_order_id(order_id)
 
@@ -36,7 +37,8 @@ class OrderService:
     def get_order_result(self, order_id):
         order_info = self._order_dao.get_order_by_order_id(order_id)
         # order_cpnt = self._order_dao.get_order_detail_by_order_id(order_id)
-        order_cpnt_df = self._order_dao.get_order_detail_df_by_order_id(order_id)
+        order_cpnt_df = self._order_dao.get_order_detail_df_by_order_id(
+            order_id)
         return {'order_info': order_info, 'order_cpnt_df': order_cpnt_df}
 
     def save_order(self, order_dict):
@@ -50,7 +52,8 @@ class OrderService:
             order_id = res_dict.get('order_id')
             order_info = res_dict.get('order_info')
 
-            t1 = threading.Thread(target=self._save_xlsx_send_mail, args=(order_id, order_info))
+            t1 = threading.Thread(
+                target=self._save_xlsx_send_mail, args=(order_id, order_info))
             t1.start()
 
         else:
@@ -91,8 +94,8 @@ class OrderService:
         # 修改 df_to_gen_xlsx 的存储服务的投标报价（总价 / 数量 / year）
         storage_df_idx = df_to_gen_xlsx.query("产品类别 == '存储服务'").index
         df_to_gen_xlsx.loc[storage_df_idx, '投标报价'] = df_to_gen_xlsx.loc[storage_df_idx, '单项价格'] \
-                                                     / df_to_gen_xlsx.loc[storage_df_idx, '预定数量'] \
-                                                     / df_to_gen_xlsx.loc[storage_df_idx, '预定年限']
+            / df_to_gen_xlsx.loc[storage_df_idx, '预定数量'] \
+            / df_to_gen_xlsx.loc[storage_df_idx, '预定年限']
 
         new_xlsx_name = 'order_{order_id}.xlsx'.format(order_id=order_id)
         new_xlsx_path = ORDER_OUTPUT_XLSX_DIR_PATH + new_xlsx_name
@@ -110,7 +113,8 @@ class OrderService:
         sht = wb.sheets[0]
         ordered_prod_df = df_to_gen_xlsx.query("预定数量>0.5").copy()
         ordered_prod_df.sort_values('产品编号', ascending=True, inplace=True)
-        ordered_prod_df = ordered_prod_df[sht.range('A1').expand('right').value]
+        ordered_prod_df = ordered_prod_df[sht.range(
+            'A1').expand('right').value]
         sht.range('A2').value = ordered_prod_df.values
 
         wb.save()
@@ -150,12 +154,15 @@ class OrderService:
                                today_yyyymmdd=str(datetime.datetime.now())[:10])
             attachments = [self.new_xlsx_path]
 
-            cc_addrs = list(set([order_info['admin_user']['电子邮箱']] + RECEIVERS))
+            cc_addrs = list(
+                set([order_info['admin_user']['电子邮箱']] + RECEIVERS))
 
             # 发给客户，抄给客户经理（和我，但是126邮箱自己抄给自己收不到……）
-            send_email([order_info['email']], subject, content, images, attachments, cc=cc_addrs)
+            send_email([order_info['email']], subject, content,
+                       images, attachments, cc=cc_addrs)
             # 发给管理员和客户经理 （为什么抄送发送不成功）
-            send_email(cc_addrs, subject, content, images, attachments, cc=None)
+            send_email(cc_addrs, subject, content,
+                       images, attachments, cc=None)
             logger.info('订单确认邮件发送成功')
         except Exception as e:
             logger.error('订单确认邮件发送失败')

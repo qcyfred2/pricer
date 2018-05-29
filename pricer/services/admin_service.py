@@ -14,7 +14,8 @@ class AdminService:
         self.admin_dao = AdminDao()
 
     def check_admin(self, u):
-        sql = """select * from t_admin where 用户名 = '{name}' and 激活 = 'y';""".format(**u)
+        sql = """select * from t_admin where 用户名 = '{name}' and 激活 = 'y';""".format(
+            **u)
         df = self.admin_dao.execute_df_query_by_sql(sql)
         if not df.empty:
             print('登录验证成功')
@@ -25,14 +26,16 @@ class AdminService:
         u = self.admin_dao.save_admin(u)
         # 如果注册成功，则开启新线程，发送激活邮件
         if u is not None:
-            t1 = threading.Thread(target=self._send_active_url_email, args=(u,))
+            t1 = threading.Thread(
+                target=self._send_active_url_email, args=(u,))
             t1.start()
         return u
 
     def _send_active_url_email(self, u):
 
         subject = '用户激活_{name}'.format(**u)
-        u['activate_url'] = ACTIVATE_URL_PREFIX + '?user_id={user_id}&identify_code={id_code}'.format(**u)
+        u['activate_url'] = ACTIVATE_URL_PREFIX + \
+            '?user_id={user_id}&identify_code={id_code}'.format(**u)
 
         images = []
 
@@ -61,7 +64,8 @@ class AdminService:
 
         if len(rs) > 0:
             if rs[0][0] == u['identify_code']:
-                sql = """update t_admin set 激活 = 'y' where 编号 = {user_id}; """.format(**u)
+                sql = """update t_admin set 激活 = 'y' where 编号 = {user_id}; """.format(
+                    **u)
                 self.admin_dao.execute_update_by_sql(sql)
                 return u
         else:

@@ -19,17 +19,21 @@ app_host = app_info.get('app_host')
 
 # 激活时的url前缀
 # 注意nginx…
-ACTIVATE_URL_PREFIX = 'http://{host}/{app_name}/mobile/activate/'.format(host=app_host, app_name=APP_NAME)
+ACTIVATE_URL_PREFIX = 'http://{host}/{app_name}/mobile/activate/'.format(
+    host=app_host, app_name=APP_NAME)
 
 
 # 订单模板
 # excel文件
-ORDER_XLSX_TEMPLATE = '{base_dir}/{app_name}/excel/prod.xlsx'.format(base_dir=BASE_DIR, app_name=APP_NAME)
+ORDER_XLSX_TEMPLATE = '{base_dir}/{app_name}/excel/prod.xlsx'.format(
+    base_dir=BASE_DIR, app_name=APP_NAME)
 # 生成的订单保存路径
-ORDER_OUTPUT_XLSX_DIR_PATH = '{base_dir}/{app_name}/excel/output/'.format(base_dir=BASE_DIR, app_name=APP_NAME)
+ORDER_OUTPUT_XLSX_DIR_PATH = '{base_dir}/{app_name}/excel/output/'.format(
+    base_dir=BASE_DIR, app_name=APP_NAME)
 
 # 日志输出文件
-LOG_PATH = '{base_dir}/{app_name}/logs/pricer.txt'.format(base_dir=BASE_DIR, app_name=APP_NAME)
+LOG_PATH = '{base_dir}/{app_name}/logs/pricer.txt'.format(
+    base_dir=BASE_DIR, app_name=APP_NAME)
 
 # MySQL数据库
 db_info = setting_dict.get('database')

@@ -349,8 +349,8 @@ def gen_order_detail(order_id):
         tpl_xlsx_path = base_path + 'prod.xlsx'
         dt_str = get_dt_str()
         new_xlsx_path = base_path + \
-                        'prod_{order_id}_{dt_str}.xlsx'.format(
-                            order_id=order_id, dt_str=dt_str)
+            'prod_{order_id}_{dt_str}.xlsx'.format(
+                order_id=order_id, dt_str=dt_str)
         shutil.copy(tpl_xlsx_path, new_xlsx_path)
 
         app = xw.App(visible=False, add_book=False)
