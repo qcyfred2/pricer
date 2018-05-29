@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+
+    <link rel="shortcut icon" href="/static/favicon.ico">
+
+    {% block head %}
+       <p>original</p>
+    {% endblock %}
+
+    <link rel="stylesheet" href="{{nginx_prefix}}/static/css/bootstrap.min.css">
+    <script src="{{nginx_prefix}}/static/js/bootstrap.min.js"></script>
+    <script src="{{nginx_prefix}}/static/js/jquery.min.js"></script>
+</head>
+
+<body>
+    <h1>政务云订单</h1>
+    <!--<p>测试。</p>-->
+    {% block body %}
+       <p>original</p>
+    {% endblock %}
+</body>
+
+</html>

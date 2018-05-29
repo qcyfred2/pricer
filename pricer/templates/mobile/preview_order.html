@@ -1,0 +1,98 @@
+<!--Mobile-->
+
+{% extends "mobile/base.html" %} {% block head %}
+<title>报价系统</title>
+{% endblock %} {% block body %}
+
+
+<nav id="nav" class="navbar navbar-default navbar-fixed-bottom" role="navigation"
+style="height: 40px; line-height: 40px;">
+    <div class="text-right">
+        <span class="">共计
+            <a id="total_price">{{data.cart.total_price}}</a> 元</span>
+        <!--<a class="btn btn-default"  href="all_products" target="_parent">返回修改</a>-->
+        <a class="btn btn-default" href="{{nginx_prefix}}/mobile/input_customer_info/" target="_parent">确认订单</a>
+    </div>
+</nav>
+
+
+<div data-role="page" id="pagetwo">
+
+
+    <div data-role="header">
+        <h2>订单预览</h2>
+    </div>
+
+    <div data-role="main" class="ui-content">
+
+        <!--本来应该全部用js写…-->
+
+        {% for prod_type_key, prods_list in data.prods_html_data.items %}
+        <div class="list-group">
+            <span href="#" class="list-group-item active">
+                <h4 class="list-group-item-heading">
+                    {{ prod_type_key }}
+                </h4>
+            </span>
+
+            {% for prod in prods_list %}
+            <span href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">
+                    {{prod.产品名称}} （{{prod.产品品牌}}）
+                </h4>
+                <p class="list-group-item-text">
+                    产品单价 <span id="unit_price_{{prod.产品编号}}">{{data.投标报价}}</span> {{prod.报价单位}}
+                </p>
+                <p class="list-group-item-text">
+                    预订数量 {{prod.预订数量}} {{prod.产品量词}}
+                </p>
+                <p class="list-group-item-text">
+                    预定年限 {{prod.预定年限}} 年
+                </p>
+                <p class="list-group-item-text">
+                    价格小计 {{prod.预定价格}} 元
+                </p>
+            </span>
+
+            {% endfor %} {% endfor %}
+
+            <br/>
+            <br/>
+
+        </div>
+    </div>
+
+
+
+</div>
+
+
+<script type="text/javascript">
+
+    function to_fixed(x) {
+        return x.toFixed(2);
+    }
+
+    $(document).ready(function () {
+
+        data = {{ data.js_data | safe }};
+        cart = data.cart;
+
+        //console.log(cart);
+
+        for(var o in cart) {
+            if (isNaN(o)) {
+
+            } else {
+                if (o>0) {
+                    var t = cart[o];
+                    var unit_px = $.parseJSON(t)['unit_price'];
+                    $('#unit_price_'+o).text(to_fixed(unit_px));
+                }
+            }
+        }
+
+    });
+
+
+</script> {% endblock %}

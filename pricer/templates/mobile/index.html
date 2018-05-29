@@ -1,0 +1,141 @@
+<!--Mobile-->
+
+{% extends "mobile/base.html" %} {% block head %}
+<title>报价系统</title>
+{% endblock %} {% block body %}
+
+<div data-role="page" id="pagethree">
+
+    <div data-role="header">
+        <h2>报价系统</h2>
+    </div>
+
+    <div data-role="main" class="ui-content">
+        <div class="list-group">
+            <span href="#" class="list-group-item active">
+                <h4 class="list-group-item-heading">
+                    报价系统
+                </h4>
+
+            </span>
+
+            <span href="#" class="list-group-item">
+                <p class="list-group-item-text">
+                    <input type="submit" value="进入系统" onclick="return login()"/>
+                </p>
+            </span>
+
+        </div>
+
+        <div class="list-group">
+            <span href="#" class="list-group-item active">
+                <h4 class="list-group-item-heading">
+                    订单管理
+                </h4>
+
+            </span>
+
+            <span href="#" class="list-group-item">
+                 <p class="list-group-item-text">
+                    <input type="submit" value="查询订单" onclick="return queryAllOrders()"/>
+                </p>
+            </span>
+
+        </div>
+
+        <div class="list-group">
+            <span href="#" class="list-group-item active">
+                <h4 class="list-group-item-heading">
+                    账号管理
+                </h4>
+
+            </span>
+
+            <span href="#" class="list-group-item">
+                 <p class="list-group-item-text">
+                    <input type="submit" value="用户注册" onclick="return register()"/>
+                </p>
+
+                <p class="list-group-item-text">
+                    <input type="submit" value="切换用户" onclick="return changeUser()"/>
+                </p>
+
+                 <p class="list-group-item-text">
+                    <input type="submit" value="我的名片" onclick="return myInfo()"/>
+                </p>
+            </span>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+    });
+
+    // 提交前的表单验证
+    // 暂时就用js简单验证
+
+    function login() {
+
+        $.ajax({
+            url: '{{nginx_prefix}}/mobile/pre_login/',
+            contentType: "application/json;charset=utf-8",
+            dataType: 'json',
+            method: 'GET',
+            success: function (data) {
+                // 已经登录过了
+                if (data.result == 1) {
+                    location.href = "{{nginx_prefix}}/mobile/all_products/";
+                } else if (data.result == 0) {
+                    location.href = "{{nginx_prefix}}/mobile/login/";
+                } else {
+                    console.log('500');
+                }
+            },
+            /*
+            error: function(xhr) {
+                // 导致出错的原因较多，以后再研究
+                alert('error:' + JSON.stringify(xhr));
+            }*/
+        })
+
+            .done(function (data) {
+                // 请求成功后要做的工作
+                console.log('success');
+            })
+            .fail(function () {
+                // 请求失败后要做的工作
+                console.log('error');
+            })
+            .always(function () {
+                // 不管成功或失败都要做的工作
+                console.log('complete');
+            });
+    }
+
+
+    function register() {
+        location.href = "{{nginx_prefix}}/mobile/input_register/";
+    }
+
+    function changeUser() {
+        location.href = "{{nginx_prefix}}/mobile/login/";
+    }
+
+    function queryAllOrders() {
+        location.href = "{{nginx_prefix}}/mobile/all_orders/";
+    }
+
+    function myInfo() {
+        location.href = "{{nginx_prefix}}/mobile/my_info/";
+    }
+
+
+</script> {% endblock %}

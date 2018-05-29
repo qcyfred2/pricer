@@ -1,0 +1,130 @@
+<!--Mobile-->
+
+{% extends "mobile/base.html" %} {% block head %}
+<title>报价系统</title>
+{% endblock %} {% block body %}
+
+
+<div data-role="page" id="pagethree">
+
+    <div data-role="header">
+        <h2>用户注册</h2>
+    </div>
+
+    <div data-role="main" class="ui-content">
+        <div class="list-group">
+            <span href="#" class="list-group-item active">
+                <h4 class="list-group-item-heading">
+                    用户注册
+                </h4>
+
+            </span>
+            <span href="#" class="list-group-item">
+                <p class="list-group-item-text">
+                    <input type="text" name="name" id="name" placeholder="姓名*" />
+                </p>
+                <p class="list-group-item-text">
+                    <input type="text" name="tel" id="tel" placeholder="电话*" />
+                </p>
+                <p class="list-group-item-text">
+                    <input type="text" name="email" id="email" placeholder="E-mail*" />
+                </p>
+                <p class="list-group-item-text">
+                    <input type="text" name="id_code" id="id_code" placeholder="验证码*" />
+                </p>
+                <p class="list-group-item-text">
+                    <input type="submit" value="注册" onclick="return register()" />
+                </p>
+                <p class="" style="font-size: 10pt; ">
+                    <span style="color: red;">*</span>请将信息填写完整
+                </p>
+            </span>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript">
+
+    // 提交前的表单验证
+    // 暂时就用js简单验证
+    function register() {
+
+        var name = $("input:text[name='name']").val();
+        if (name.length <= 0) {
+            // alert("客户姓名不能为空");
+            return false;
+        }
+
+        // email的格式，长度…
+        var email = $("input:text[name='email']").val();
+        if (email.length <= 0) {
+            return false;
+        }
+
+        // 电话
+        var tel = $("input:text[name='tel']").val();
+        if (tel.length != 11) {
+            return false;
+        }
+
+        // 验证码
+        var id_code = $("input:text[name='id_code']").val();
+        if ('0000' != id_code) {
+            return false;
+        }
+
+        var form = new FormData();
+        form.append("csrfmiddlewaretoken", '{{ csrf_token }}');
+        form.append("name", name);
+        form.append("email", email);
+        form.append("tel", tel);
+
+        $.ajax({
+            url: '{{nginx_prefix}}/mobile/register/',
+            contentType: "application/json;charset=utf-8",
+            dataType: 'json',
+            data: form,
+            processData: false,
+            contentType: false,
+
+            method: 'POST',
+            success: function (data) {
+                console.log(data);
+                if (data.result == 1) {
+                    alert("注册成功，请查收邮件并激活账号");
+                    // console.log(data);
+                    location.href = "{{nginx_prefix}}/mobile/login/"; // 重定向
+                } else if (data.result == 0) {
+                    alert('注册失败，请稍后再试');
+                }
+                else {
+                    console.log('500');
+                }
+            },
+            /*
+            error: function(xhr) {
+                // 导致出错的原因较多，以后再研究
+                alert('error:' + JSON.stringify(xhr));
+            }*/
+        })
+
+            .done(function (data) {
+                // 请求成功后要做的工作
+                console.log('success');
+            })
+            .fail(function () {
+                // 请求失败后要做的工作
+                console.log('error');
+            })
+            .always(function () {
+                // 不管成功或失败都要做的工作
+                console.log('complete');
+            });
+    }
+
+
+</script> {% endblock %}
