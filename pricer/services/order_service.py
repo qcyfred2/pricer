@@ -128,6 +128,7 @@ class OrderService:
 
         try:
             content = """
+                    <b>自动邮件，请勿回复</b><br/><br/>
                     <b>尊敬的客户：</b><br/><br/>
                     您好！<br/>
                     您提交的订单我们已收到，我们将尽快与您联系！<br/>
@@ -144,9 +145,7 @@ class OrderService:
                     电子邮箱 {email}<br/>
                     订单金额 {total_price}<br/>
                     下单时间 {order_datetime}<br/>
-                    注：因小数点精度限制，实际价格可能有所出入；许可等产品的预定期限，请以最终合同为准。<br/><br/>
-                    
-                    <b>自动邮件，请勿回复</b>
+                    注：因小数点精度限制，实际价格可能有所出入，许可等产品的预定期限，均以最终合同为准。
                     """.format(order_id=order_id, name=order_info['name'], tel=order_info['tel'],
                                email=order_info['email'], total_price=order_info['total_price'],
                                order_datetime=order_info['order_datetime'],
