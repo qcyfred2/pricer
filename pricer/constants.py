@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 # 本应用中的常量
 from pricer.settings import BASE_DIR
+from pricer import setting_dict
 
 
 # 邮箱设置
-SENDER = ''
-RECEIVERS = ['']  # 管理员邮箱
-USERNAME = ''
-PASSWORD = ''
-SMTP_SERVER = ''
+email_info = setting_dict.get('email')
+SENDER = email_info['sender']
+RECEIVERS = email_info['receivers']  # 管理员邮箱
+USERNAME = email_info['username']
+PASSWORD = email_info['password']
+SMTP_SERVER = email_info['smtp_server']
 
 
 APP_NAME = 'pricer'
@@ -28,20 +30,13 @@ ORDER_OUTPUT_XLSX_DIR_PATH = '{base_dir}/{app_name}/output_xlsx/'.format(base_di
 LOG_PATH = '{base_dir}/{app_name}/logs/pricer.txt'.format(base_dir=BASE_DIR, app_name=APP_NAME)
 
 # MySQL数据库
-
-DB_USER = ''
-DB_PWD = ''
-DB_NAME = ''
-DB_HOST = ''
-DB_PORT = 3306
-DB_CHARSET = 'utf8'
-
-DB_URL_INFO = 'mysql+pymysql://%(user)s:%(password)s@%(host)s:%(port)d/%(database)s?charset='+DB_CHARSET
-DB_INFO = {'user': DB_USER,
-           'password': DB_PWD,
-           'host': DB_HOST,
-           'database': DB_NAME,
-           'port': DB_PORT}
+db_info = setting_dict.get('database')
+DB_USER = db_info['user']
+DB_PWD = db_info['pwd']
+DB_NAME = db_info['db_name']
+DB_HOST = db_info['host']
+DB_PORT = db_info['port']
+DB_CHARSET = db_info['charset']
 
 
 # Session 过期时间

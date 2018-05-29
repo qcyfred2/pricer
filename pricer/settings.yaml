@@ -1,0 +1,14 @@
+email:
+  sender:
+  receivers: []
+  username:
+  password:
+  smtp_server:
+
+database:
+  host:
+  port:
+  user:
+  pwd:
+  db_name:
+  charset:
