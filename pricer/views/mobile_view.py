@@ -275,7 +275,7 @@ class MobileView(View):
             user_dict['name'] = request.POST.get('name', '')
             user_dict['email'] = request.POST.get('email', '')
             user_dict['id_code'] = uuid.uuid1().hex
-            user_dict['pwd'] = user_dict['tel'][-6:]
+            user_dict['pwd'] = user_dict['tel'][-4:]
 
             # TODO: 应该对输入进行校验
             # TODO: 数据库，用户名，要加唯一索引！

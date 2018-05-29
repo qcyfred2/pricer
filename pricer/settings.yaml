@@ -12,3 +12,7 @@ database:
   pwd:
   db_name:
   charset:
+
+app_info:
+  app_name:
+  app_host:

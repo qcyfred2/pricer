@@ -13,11 +13,13 @@ PASSWORD = email_info['password']
 SMTP_SERVER = email_info['smtp_server']
 
 
-APP_NAME = 'pricer'
+app_info = setting_dict.get('app_info')
+APP_NAME = app_info.get('app_name')
+app_host = app_info.get('app_host')
 
 # 激活时的url前缀
 # 注意nginx…
-ACTIVATE_URL_PREFIX = ''
+ACTIVATE_URL_PREFIX = 'http://{host}/{app_name}/mobile/activate/'.format(host=app_host, app_name=APP_NAME)
 
 
 # 订单模板

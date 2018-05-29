@@ -20,11 +20,11 @@ def send_email(receivers,  subject, content, images, attachments, cc=None):
     # add the title, from and to
     msg = MIMEMultipart('related')
     msg['Subject'] = Header(subject, 'utf-8')
-    msg['from'] = SENDER
-    msg['to'] = ','.join(receivers)
+    msg['From'] = SENDER
+    msg['To'] = ';'.join(receivers)
 
     if (cc is not None) and (len(cc) > 0):
-        msg['cc'] = ','.join(cc)
+        msg['Cc'] = ';'.join(cc)
 
     # add the content into the email
     msgAlternative = MIMEMultipart('alternative')

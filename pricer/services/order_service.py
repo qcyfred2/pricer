@@ -140,7 +140,9 @@ class OrderService:
                     电子邮箱 {email}<br/>
                     订单金额 {total_price}<br/>
                     下单时间 {order_datetime}<br/>
-                    注：因小数点精度限制，实际价格可能有所出入，请以最终合同为准。<br/>
+                    注：因小数点精度限制，实际价格可能有所出入；许可等产品的预定期限，请以最终合同为准。<br/><br/>
+                    
+                    <b>自动邮件，请勿回复</b>
                     """.format(order_id=order_id, name=order_info['name'], tel=order_info['tel'],
                                email=order_info['email'], total_price=order_info['total_price'],
                                order_datetime=order_info['order_datetime'],
@@ -152,8 +154,8 @@ class OrderService:
 
             # 发给客户，抄给客户经理（和我，但是126邮箱自己抄给自己收不到……）
             send_email([order_info['email']], subject, content, images, attachments, cc=cc_addrs)
-            # 发给我
-            send_email(RECEIVERS, subject, content, images, attachments, cc=None)
+            # 发给管理员和客户经理 （为什么抄送发送不成功）
+            send_email(cc_addrs, subject, content, images, attachments, cc=None)
             logger.info('订单确认邮件发送成功')
         except Exception as e:
             logger.error('订单确认邮件发送失败')
