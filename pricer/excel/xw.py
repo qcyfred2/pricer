@@ -220,7 +220,7 @@ def get_all_orders():
     # 第3页
     wb = xw.Book.caller()
     sht = wb.sheets[2]
-    sht.range('D1:N1000').value = None
+    sht.range('D1').expand('table').value = None
     sht.range('D1').value = df
 
 
@@ -465,14 +465,7 @@ def get_contract_basic_info(order_id, two_or_three):
     conn = connect()
     wb = xw.Book.caller()
     sht = wb.sheets[5]  # Sheet：生成合同
-    if two_or_three == 'two':
-        df = pd.DataFrame(sht.range('A3').expand(
-            'table').value, columns=['参数名', '参数值'])
-    else:
-        df = pd.DataFrame(sht.range('G3').expand(
-            'table').value, columns=['参数名', '参数值'])
 
-    df['订单编号'] = order_id
     try:
         sql = """select * from t_contract_info where 订单编号 = {order_id};""".format(
             order_id=order_id)
