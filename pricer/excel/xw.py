@@ -32,8 +32,6 @@ N_ALL_ORDERED_PRODUCTS_COL = 12
 
 base_path = os.path.abspath(os.path.dirname(__file__)) + '/'
 
-prod_template_dir = os.path.abspath(os.path.dirname(__file__) + os.path.sep + '..' + '/excel_template') + '/'
-
 
 def get_dt_str():
     dt_str = str(datetime.datetime.now())[:19].replace(
@@ -348,7 +346,7 @@ def gen_order_detail(order_id):
             'right').value)
 
     if not df.empty:
-        tpl_xlsx_path = prod_template_dir + 'prod.xlsx'
+        tpl_xlsx_path = base_path + 'prod.xlsx'
         dt_str = get_dt_str()
         new_xlsx_path = base_path + \
                         'prod_{order_id}_{dt_str}.xlsx'.format(
