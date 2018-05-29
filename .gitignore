@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+.idea/
+*.pyc
+*.png
+*.txt
+*.exe
+*.htm
+*.html
+db.sqlite3

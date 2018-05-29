@@ -1,0 +1,411 @@
+<!--Mobile-->
+
+{% extends "mobile/base.html" %} {% block head %}
+<title>报价系统</title>
+{% endblock %} {% block body %}
+
+<!-- 底部导航条 -->
+<nav id="nav" class="navbar navbar-default navbar-fixed-bottom" role="navigation" style="height: 40px; line-height: 40px;">
+    <!--style="margin-right:20px;" 位置，高度-->
+    <div class="text-right">
+        <span class="">共计 &yen;
+            <a id="total_price">0</a> 元</span>
+        <a class="btn btn-default" onclick="return clear_cart()">清空</a>
+        <a class="btn btn-default" href="{{nginx_prefix}}/mobile/preview_order/" target="_parent" onclick="return check_order_list()">选好了</a>
+        <!-- <a class="btn btn-default" href="{{ object.get_absolute_url }}" target="_parent">test</a> -->
+    </div>
+</nav>
+
+
+<div data-role="page" id="pageone">
+
+    <!-- 产品的详细页面 -->
+    <!-- data-position-fixed -->
+    <div data-role="panel" id="detailPage" data-position-fixed="true" data-position="left" data-display="push" data-swipe-close="false">
+
+        <div id="panel_content">
+            <div>
+                <p>
+                    <b>
+                        <span id="name_detail">产品名称</span>
+                    </b>
+                </p>
+                <p>品牌：
+                    <span id="brand_detail">联通</span>
+                </p>
+                <p>报价：
+                    <span>&yen;
+                        <span id="unit_price_detail">1</span>
+                    </span>
+                    <span id="price_unit_detail">元/台/年</span>
+                </p>
+                <p>价格：
+                    <span>&yen; </span>
+                    <a id="price_item">1</a> 元</p>
+            </div>
+
+            <div>
+                <!-- <p>
+                    <b>产品预定</b>
+                </p> -->
+                <!-- <fieldset class="xxx" style="width:100px;"> -->
+                <table width="100%">
+                    <tr>
+                        <td width="75%">
+                            <select name="quantity" id="select_quantity" onchange="selectChange()"></select>
+                        </td>
+                        <td>&nbsp;</td>
+                        <td id="order_unit">台</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select name="year" id="select_year" onchange="selectChange()"></select>
+                        </td>
+                        <td>&nbsp;</td>
+                        <td> 年</td>
+                    </tr>
+                </table>
+                <!-- </fieldset> -->
+            </div>
+            <div>
+                <br/>
+                <p>
+                    <b>详细参数</b>
+                </p>
+                <span id="prod_desc">产品描述</span>
+
+                <br/>
+                <br/>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div data-role="header">
+        <h2>产品列表</h2>
+    </div>
+
+    <!--<div>-->
+    <!--{{html_data.prods_html_data}}-->
+    <!--</div>-->
+
+    <div data-role="main" id="prod_list_page" class="ui-content">
+        <select id="select_prod_type" onchange="selectProdtypeChange()">
+            <option value="all_prod_type">全选</option>
+            {% for prod_type_key, prods_list in html_data.prods_html_data.items %}
+            <option value="{{prod_type_key}}">{{prod_type_key}}</option>
+            {% endfor %}
+        </select>
+        <form class="ui-filterable">
+            <input id="myFilter" data-type="search" placeholder="搜索">
+        </form>
+
+        <ul data-role="listview" data-autodividers="false" data-inset="true" data-filter="true" data-input="#myFilter" id="prods_list_view">
+
+            {% for prod_type_key, prods_list in html_data.prods_html_data.items %}
+            <li data-role="divider" class="{{prod_type_key}} all_prod_type list_view_li">{{ prod_type_key }}</li>
+
+            {% for prod in prods_list %}
+
+            <li id="prod_li_{{prod.产品编号}}" class="{{prod_type_key}} list_view_li all_prod_type">
+                <a id="prod_item{{prod.产品编号}}" href="#detailPage" onclick="showDetailPage({{prod.产品编号}})">
+                    {{prod.产品简称}}
+                    <!--加隐藏标签是为了搜索-->
+                    <b hidden>{{prod_type_key}}</b>
+
+                    <!--<img src="/try/demo_source/chrome.png">-->
+                    <p>品牌：{{prod.产品品牌}}</p>
+                    <p>简介：{{prod.简要描述}}</p>
+                    <p>报价：&yen; {{prod.投标报价}} {{prod.报价单位}}</p>
+                </a>
+            </li>
+
+
+            {% endfor %} {% endfor %}
+
+        </ul>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+    // 格式化数字（2位小数，截断）
+    function numeric_cutoff(x) {
+        return Math.floor(x * 100) / 100;
+    }
+
+    function to_fixed(x) {
+        return x.toFixed(2);
+    }
+
+    g_scroll_height = 0;
+
+    // 产品类别分组选项（下拉菜单）
+    function selectProdtypeChange() {
+        var opt_val = $("#select_prod_type").val();
+        $(".all_prod_type").hide();
+        $("." + opt_val).show();
+    }
+
+    /* 商品详细页面和商品列表页面切换之间的画面定位 */
+    // 好神奇的一个函数。。。太曲线救国了吧
+    function position_auto_set() {
+
+        // 记录位置        
+        g_page_status = 0;
+        $("#prod_list_page").mousedown(function () {
+            // $("#prod_list_page").css("background-color","yellow");
+            g_padding_top_value = $(window).scrollTop();
+        });
+
+        $("#prod_list_page").mouseleave(function () {
+            g_page_status = 1;
+            // $("html,body").animate({ scrollTop: 0 }, 100);
+            // window.scrollTo(0,0);
+        });
+
+        // $("#detailPage").on("swipeleft",function(){
+        //     // alert("向左滑动!");
+        //     g_page_status = 1;
+        // }); 
+
+        // 恢复位置
+        $("#prod_list_page").mouseup(function () {
+            if (g_page_status == 0) {
+            } else {
+                $("html,body").animate({ scrollTop: g_padding_top_value }, 10);
+                // console.log(g_padding_top_value);
+                // window.scrollTo(0,g_padding_top_value);
+                g_page_status = 0;
+            }
+        });
+    }
+
+    $(document).ready(function () {
+
+        position_auto_set();
+
+        TOTAL_PRICE = -1; // 总价
+        TOTAL_CATEGORY_NUMBER = -2;  // 类别总数
+        TOTAL_NUMBER = -3;  // 小件总数
+
+        data = {{ js_data | safe }};
+
+        // console.log(data);
+
+        // 所有产品介绍
+        g_products = data.prods_js_data;
+        // console.log(g_products);
+
+        // g_cart =  $.parseJSON(data.cart); // data.cart 是json文本
+        g_cart = data.cart;
+
+        // 如果该项选定数量>0，修改字体颜色，“已购”标记。
+        for (var key in g_cart) {
+            if (key > 0) { // key>0的为产品编号
+                $('#prod_item' + key).css({ "color": "blue" });
+            }
+        }
+
+        $('#total_price').text(to_fixed(g_cart[TOTAL_PRICE]));
+        // $('#total_number').text(g_cart[TOTAL_NUMBER]);
+
+        // 初始化详细页面当前的焦点（prod_id)
+        g_focus_prod_id = 1;
+
+        // 生成 可订数量 & 可订年份 的下拉菜单
+        for (var i = 0; i <= 100; i++) {
+            $("#select_quantity").append("<option value='" + i + "'>" + i + "</option>");
+        }
+        for (var i = 1; i <= 5; i++) {
+            $("#select_year").append("<option value='" + i + "'>" + i + "</option>");
+        }
+
+    });
+
+    /* 显示产品详细页面 */
+    // 更新产品介绍、cart中已购数量（金额、已选的选项）
+    function showDetailPage(prod_id) {
+
+        // 更新全局焦点，焦点即为产品编号
+        g_focus_prod_id = prod_id;
+
+        var prod = g_products[prod_id];
+
+        $('#name_detail').text(prod['产品名称']);
+        $('#brand_detail').html(prod['产品品牌']);
+        $('#unit_price_detail').text(to_fixed(prod['投标报价']));
+        $('#price_unit_detail').text(prod['报价单位']);
+        $('#order_unit').html(prod['产品量词']);
+        $('#prod_desc').html(prod['规格描述']);
+
+
+        // cart中有id，就更新数量。否则，数量设为0。
+        // 购物车中如果没有该商品，价格初始化为0
+        // 否则，填预定该商品的价格
+        if (g_cart.hasOwnProperty(g_focus_prod_id)) {
+            // 更新已选数量下拉框
+            var product_order = $.parseJSON(g_cart[g_focus_prod_id]);
+            $("#select_quantity").val(product_order['quantity']);
+            $("#select_year").val(product_order['year']);
+            $("#price_item").text(to_fixed(product_order['product_price']));
+
+            // 更新投标报价，因为存储服务的投标报价（单价）会随着数量的变化而变化。
+            $('#unit_price_detail').text(to_fixed(product_order['unit_price']));
+
+        } else {
+            $("#price_item").text(0);
+            $("#select_quantity").val(0);
+            $("#select_year").val(1);
+        }
+
+        $('select').selectmenu('refresh', true); // jquery mobile的坑，必须手动刷新！
+
+    }
+
+
+    /* 产品数量改变 */
+    function selectChange() {
+        var product_id = g_focus_prod_id;
+
+        var quantity = $("#select_quantity").val();
+        var year = $("#select_year").val();
+
+        // 更新界面上显示的价格信息，并通过ajax与服务器端session同步
+        $.ajax({
+            url: '{{nginx_prefix}}/mobile/update_cart/?product_id=' + product_id + '&quantity=' + quantity + '&year=' + year,
+            dataType: 'json',
+            method: 'GET',
+            success: function (data) {
+                if (data.result == 1) {
+
+                    // console.log(data);
+
+                    // 更新全局cart
+                    g_cart = data.cart;
+
+                    // 要根据当前的g_cart更新页面文字颜色，“已购”标记。
+                    for (var key in g_products) {
+                        // “该项选定数量>0” 在这里等价于 “是否存在key”
+                        if (g_cart.hasOwnProperty(key)) {
+                            $('#prod_item' + key).css({ "color": "blue" });
+                        } else {
+                            $('#prod_item' + key).css({ "color": "black" });
+                        }
+                    }
+
+                    // 根据当前focus的页面来改变预定单个产品的价格
+                    if (g_cart.hasOwnProperty(g_focus_prod_id)) {
+                        var product_order = $.parseJSON(g_cart[g_focus_prod_id]);
+                        $("#price_item").text(to_fixed(product_order["product_price"]));
+                        $('#unit_price_detail').text(to_fixed(product_order['unit_price']));
+                    } else {
+                        $("#price_item").text(0);
+                        // 如果存储服务数量为0， 其单价为0 （特殊处理）
+                        if (g_products[g_focus_prod_id]['产品类别'] == '存储服务') {
+                            $('#unit_price_detail').text(0);
+                        }
+                    }
+
+                    // 更新total_px
+                    $('#total_price').text(to_fixed(g_cart[TOTAL_PRICE]));
+                    // $('#total_number').text(g_cart[TOTAL_NUMBER]);
+
+
+                } else {
+                    console.log('500');
+                }
+            },
+            /*
+            error: function(xhr) {
+                // 导致出错的原因较多，以后再研究
+                alert('error:' + JSON.stringify(xhr));
+            }*/
+        })
+            .done(function (data) {
+                // 请求成功后要做的工作
+                console.log('success');
+            })
+            .fail(function () {
+                // 请求失败后要做的工作
+                console.log('error');
+            })
+            .always(function () {
+                // 不管成功或失败都要做的工作
+                console.log('complete');
+            });
+    }
+
+
+    /* 清空cart */
+    function clear_cart() {
+
+        if (g_cart[TOTAL_NUMBER] < 0.5) {
+            return false;
+        }
+
+        var ret = window.confirm("清空？"); //当点击确定时 返回 true
+        if (ret) {
+
+            $.ajax({
+                url: '{{nginx_prefix}}/mobile/clear_cart/',
+                dataType: 'json',
+                method: 'GET',
+                success: function (data) {
+                    if (data.result == 1) {
+
+                        // 更新全局cart
+                        g_cart = data.cart;
+
+                        // 要根据当前的g_cart更新页面文字颜色，“已购”标记。
+                        for (var k in g_products) {
+                            $('#prod_item' + k).css({ "color": "black" });
+                        }
+
+                        // 更新价格、数量
+                        $('#total_price').text(0);
+                        $('#price_item').text(0);
+
+                        // 更新选项
+                        $("#select_quantity").val(0);
+                        $("#select_year").val(1);
+                        $('select').selectmenu('refresh', true); // jquery mobile的巨坑，必须手动刷新！
+
+                    } else {
+                        console.log('500');
+                    }
+                },
+                /*
+                error: function(xhr) {
+                    // 导致出错的原因较多，以后再研究
+                    alert('error:' + JSON.stringify(xhr));
+                }*/
+            })
+                .done(function (data) {
+                    // 请求成功后要做的工作
+                    console.log('success');
+                })
+                .fail(function () {
+                    // 请求失败后要做的工作
+                    console.log('error');
+                })
+                .always(function () {
+                    // 不管成功或失败都要做的工作
+                    console.log('complete');
+                });
+
+        }
+    }
+
+    // 如果什么都没有，就不允许进入下一步
+    function check_order_list() {
+        if (g_cart[TOTAL_NUMBER] <= 0.5) {
+            return false;
+        }
+    }
+
+
+</script> {% endblock %}
