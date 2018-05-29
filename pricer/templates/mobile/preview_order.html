@@ -37,8 +37,11 @@
             {% for prod in prods_list %}
             <span href="#" class="list-group-item">
                 <h4 class="list-group-item-heading">
-                    {{prod.产品名称}} （{{prod.产品品牌}}）
+                    {{prod.产品名称}}
                 </h4>
+                <p class="list-group-item-text">
+                    产品品牌 {{prod.产品品牌}}
+                </p>
                 <p class="list-group-item-text">
                     产品单价
                     <span id="unit_price_{{prod.产品编号}}">{{data.投标报价}}</span> {{prod.报价单位}}
