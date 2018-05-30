@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job version="11.1">
+<exportjob>
+<passwords isencoded="yes" />
+<source>
+<host>127.0.0.1</host>
+<user>u_admin</user>
+<pwd>uq+wMra0Nw==</pwd>
+<port>3306</port>
+<compressed>1</compressed>
+<ssl>0</ssl>
+<sslauth>0</sslauth>
+<clientkey></clientkey>
+<clientcert></clientcert>
+<cacert></cacert>
+<cipher></cipher>
+<charset></charset>
+</source>
+<export>
+<databases all="no">
+<database name = "db_pricer">
+<objects all="no">
+<tables all="yes">
+</tables>
+<views all="yes">
+</views>
+<procedures all="yes">
+</procedures>
+<functions all="yes">
+</functions>
+<triggers all="yes">
+</triggers>
+<events all="yes">
+</events>
+</objects>
+</database>
+</databases>
+<script compress="no" fileordir="file" timestampdir="" timestamp="yes">C:\Users\Administrator\Desktop\work\code\pricer\pricer\pricer\db_backup\zip\pricer.sql</script>
+</export>
+<options>
+<createdb>yes</createdb>
+<usedb>yes</usedb>
+<dropobjects>yes</dropobjects>
+<ignoredefiner>no</ignoredefiner>
+<bulkinsert>yes</bulkinsert>
+<completeinsert>no</completeinsert>
+<insertdelayed>no</insertdelayed>
+<flushlogs>no</flushlogs>
+<flushmaster>no</flushmaster>
+<flushslave>no</flushslave>
+<locktableread>no</locktableread>
+<singletransaction>no</singletransaction>
+<disablekeys>no</disablekeys>
+<locktablewrite>no</locktablewrite>
+<fkchecks>yes</fkchecks>
+<autocommit>no</autocommit>
+<usecharset>utf8</usecharset>
+<bulksize>0</bulksize>
+<appendtofile>no</appendtofile>
+</options>
+<abortonerror>no</abortonerror>
+<sendreport send="yes" when="onerror"><smtp>
+<displayname>ChinaUnicomCloud@163.com</displayname>
+<toemail>liaorx3@chinaunicom.cn</toemail>
+<fromemail>ChinaUnicomCloud@163.com</fromemail>
+<cc>qcy_1993@126.com</cc>
+<replyemail>ChinaUnicomCloud@163.com</replyemail>
+<host>smtp.163.com</host>
+<encryption>no</encryption>
+<port>25</port>
+<auth required="yes">
+<user>ChinaUnicomCloud@163.com</user>
+<pwd>Pbu8mBgYmBg=</pwd>
+</auth>
+<subject>Pricer_数据库备份出错</subject>
+</smtp>
+</sendreport></exportjob>
+</job>
