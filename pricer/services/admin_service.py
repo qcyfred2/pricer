@@ -14,7 +14,7 @@ class AdminService:
         self.admin_dao = AdminDao()
 
     def check_admin(self, u):
-        sql = """select * from t_admin where 用户名 = '{name}' and 密码 = `{pwd}` and 激活 = 'y';""".format(
+        sql = """select * from t_admin where 用户名 = '{name}' and 密码 = '{pwd}' and 激活 = 'y';""".format(
             **u)
         df = self.admin_dao.execute_df_query_by_sql(sql)
         if not df.empty:
