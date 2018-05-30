@@ -20,11 +20,11 @@
             </span>
             <span href="#" class="list-group-item">
                 <p class="list-group-item-text">
-                    <input type="text" name="name" id="name" placeholder="电话*" />
+                    <input type="text" name="name" id="name" placeholder="手机*" />
                 </p>
-                <!--<p class="list-group-item-text">-->
-                <!--<input type="text" name="email" id="email" placeholder="E-mail*" />-->
-                <!--</p>-->
+                <p class="list-group-item-text">
+                <input type="password" name="pwd" id="pwd" placeholder="密码*" />
+                </p>
                 <p class="list-group-item-text">
                     <input type="submit" value="登录" onclick="return login()" />
                 </p>
@@ -58,16 +58,16 @@
         }
 
 
-        /*        var email = $("input:text[name='email']").val();
-                if (email.length <= 0) {
-                    return false;
-                }
-        */
+        var pwd = $("input:text[name='pwd']").val();
+        if (pwd.length <= 0) {
+            return false;
+        }
+
 
         var form = new FormData();
         form.append("csrfmiddlewaretoken", '{{ csrf_token }}');
         form.append("name", name);
-        // form.append("email", email);
+        form.append("pwd", pwd);
 
         $.ajax({
             url: '{{nginx_prefix}}/mobile/login/',

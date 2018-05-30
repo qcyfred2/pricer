@@ -289,11 +289,9 @@ class MobileView(View):
 
         # 用户输入用户名、密码以后的登录验证
         elif '/mobile/login/' == path:
-            # TODO： 登录状态应该保存一段时间（现在已用session + filter实现了)
-            # TODO: 如果要实现上面的功能，那么就应该提供一个切换用户的功能？
             user_dict = dict()
             user_dict['name'] = request.POST.get('name', '')
-            # user_dict['email'] = request.POST.get('email', '')
+            user_dict['pwd'] = request.POST.get('pwd', '')
             u = self._admin_serv.check_admin(user_dict)
 
             if u is not None:
