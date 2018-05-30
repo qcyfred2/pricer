@@ -34,7 +34,7 @@ class ProductService:
 
     def calc_prod_item_price(self, prod_df, prod_id, quantity, year):
         px_dict = {}
-        prod_name = prod_df.loc[prod_id, '产品名称']
+        prod_name = prod_df.loc[prod_id, '产品简称']  # 注意，产品简称才是FC-SAN和IP-SAN
 
         if (prod_name != 'FC-SAN') and (prod_name != 'IP-SAN'):
             px_dict['unit_price'] = round(prod_df.loc[prod_id, '投标报价'], 2)

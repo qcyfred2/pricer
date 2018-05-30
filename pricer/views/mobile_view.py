@@ -29,7 +29,7 @@ class MobileView(View):
 
     def get(self, request):
         path = request.path
-        logger.info('GET: '+path)
+        logger.info('GET: ' + path)
 
         # 查看产品列表
         if '/mobile/all_products/' == path:
@@ -127,6 +127,10 @@ class MobileView(View):
                 lambda x: json.loads(cart[x])['year'])
             ordered_prod_df['预定价格'] = ordered_prod_df['产品编号'].apply(
                 lambda x: json.loads(cart[x])['product_price'])
+
+            # 更新投标报价
+            ordered_prod_df['投标报价'] = ordered_prod_df['产品编号'].apply(lambda x: json.loads(cart[x])['unit_price'])
+
             ordered_prod_df_grp_type = self._prod_serv.cvt_df_grp_type(
                 ordered_prod_df)
 
@@ -182,7 +186,7 @@ class MobileView(View):
 
         elif '/mobile/login/' == path:
             return render(request, 'mobile/login.html')
-        
+
         elif '/mobile/all_orders/' == path:
             admin_user_str = request.session['admin_user']
             admin_user = json.loads(admin_user_str)
@@ -210,7 +214,7 @@ class MobileView(View):
 
     def post(self, request):
         path = request.path
-        logger.info('POST: '+path)
+        logger.info('POST: ' + path)
 
         # 手机保存订单
         if '/mobile/save_order/' == path:
@@ -247,6 +251,8 @@ class MobileView(View):
                     lambda x: json.loads(cart[x])['year'])
                 ordered_prod_df['预定价格'] = ordered_prod_df['产品编号'].apply(
                     lambda x: json.loads(cart[x])['product_price'])
+                ordered_prod_df['投标报价'] = ordered_prod_df['产品编号'].apply(
+                    lambda x: json.loads(cart[x])['unit_price'])
                 ordered_prod_df_grp_type = self._prod_serv.cvt_df_grp_type(
                     ordered_prod_df)
 
@@ -307,4 +313,3 @@ class MobileView(View):
         else:
             logger.warning('404')
             return HttpResponseRedirect('/mobile/all_products/')  # 302 临时重定向
-

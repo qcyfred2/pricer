@@ -82,14 +82,14 @@ def send_email(receivers,  subject, content, images, attachments, cc=None):
     # send email to receivers
 
     # qq 邮箱 qq.stmp.com??
-    # smtp = smtplib.SMTP_SSL(smtp_server, 465)
-    # smtp.login(username, password)
-    # smtp.sendmail(sender, receivers, msg.as_string())
-    # smtp.quit()
+    smtp = smtplib.SMTP_SSL(SMTP_SERVER, 465)
+    smtp.login(USERNAME, PASSWORD)
+    smtp.sendmail(SENDER, receivers, msg.as_string())
+    smtp.quit()
 
     # 网易邮箱
-    server = smtplib.SMTP()
-    server.connect(SMTP_SERVER)  # 连接服务器
-    server.login(USERNAME, PASSWORD)  # 登录操作
-    server.sendmail(SENDER, receivers, msg.as_string())
-    server.close()
+    # server = smtplib.SMTP()
+    # server.connect(SMTP_SERVER)  # 连接服务器
+    # server.login(USERNAME, PASSWORD)  # 登录操作
+    # server.sendmail(SENDER, receivers, msg.as_string())
+    # server.close()
