@@ -9,6 +9,7 @@ base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/db_ba
 while 1:
 
     now_str = str(datetime.datetime.now())[:19].split(' ')[1]
+    print(now_str)
 
     if now_str == '22:10:00':
         files = [x for x in os.listdir(base_dir) if x != '__init__.py']
@@ -20,4 +21,4 @@ while 1:
                    content='%s<br/>数据库SQL文件' % str(datetime.datetime.now()), images=[], attachments=[sql_path],
                    cc=None)
 
-        time.sleep(1)
+    time.sleep(1)
