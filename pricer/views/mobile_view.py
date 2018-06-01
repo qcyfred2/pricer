@@ -17,7 +17,7 @@ from pandas import DataFrame, Series
 from pricer.settings import NGINX_PREFIX
 from pricer.utils.my_logger import logger
 import uuid
-
+import datetime
 
 class MobileView(View):
     def __init__(self):
@@ -33,10 +33,17 @@ class MobileView(View):
 
         # 查看产品列表
         if '/mobile/all_products/' == path:
-
+            # t1 = datetime.datetime.now()
             all_prods_df = self._prod_serv.get_all_prods_df()
+            # t2 = datetime.datetime.now()
             prods_html_data = self._prod_serv.cvt_df_grp_type(all_prods_df)
+            # t3 = datetime.datetime.now()
             prods_js_data = self._prod_serv.get_all_prods_dict()
+            # t4 = datetime.datetime.now()
+            # print(t2 - t1)
+            # print(t3 - t2)
+            # print(t4 - t3)
+            # print(t4 - t1)
             try:
                 cart = get_session_cart(request)
                 js_data = {'result': 1, 'cart': cart,
@@ -301,6 +308,7 @@ class MobileView(View):
             u = self._admin_serv.check_admin(user_dict)
 
             if u is not None:
+                u['注册时间'] = str(u['注册时间'])
                 # session, 登录成功，跳转
                 request.session.set_expiry(SESSION_EXPIER_TIME)
                 request.session['admin_user'] = json.dumps(u)
