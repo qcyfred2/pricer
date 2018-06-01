@@ -158,8 +158,9 @@ class OrderService:
 
         try:
             # 发给客户，抄给客户经理（和我，但是126邮箱自己抄给自己收不到……）
-            send_email([order_info['email']], subject, content,
-                       images, attachments, cc=cc_addrs)
+            if '@' in order_info['email']:  # 简单的邮箱验证
+                send_email([order_info['email']], subject, content,
+                           images, attachments, cc=cc_addrs)
         except Exception as e:
             logger.info('订单确认客户邮件发送失败')
             logger.info('%s, %s' % (order_info['email'], self.new_xlsx_path))

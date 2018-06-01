@@ -20,16 +20,16 @@
             </span>
             <span href="#" class="list-group-item">
                 <p class="list-group-item-text">
-                    <input type="text" name="name" id="name" placeholder="客户联系人*" />
-                </p>
-                <p class="list-group-item-text">
-                    <input type="text" name="tel" id="tel" placeholder="客户电话*" />
-                </p>
-                <p class="list-group-item-text">
-                    <input type="text" name="email" id="email" placeholder="客户E-mail*" />
-                </p>
-                <p class="list-group-item-text">
                     <textarea type="addinfo" id="organization" name="organization" placeholder="单位名称*"></textarea>
+                </p>
+                <p class="list-group-item-text">
+                    <input type="text" name="name" id="name" placeholder="客户联系人" />
+                </p>
+                <p class="list-group-item-text">
+                    <input type="text" name="tel" id="tel" placeholder="客户电话" />
+                </p>
+                <p class="list-group-item-text">
+                    <input type="text" name="email" id="email" placeholder="客户E-mail" />
                 </p>
                 <p class="list-group-item-text">
                     <input type="submit" value="提交订单" onclick="return save_order()" />
@@ -59,20 +59,23 @@
 
         var name = $("input:text[name='name']").val();
         if (name.length <= 0) {
+            name = '';
             // alert("客户姓名不能为空");
-            return false;
+            // return false;
         }
 
         // email的格式，长度…
         var email = $("input:text[name='email']").val();
         if (email.length <= 0) {
-            return false;
+            email = '';
+            // return false;
         }
 
         // 电话
         var tel = $("input:text[name='tel']").val();
         if (tel.length <= 0) {
-            return false;
+            tel = '';
+            // return false;
         }
 
         // 留言，不超过128字？ 和db设计有关

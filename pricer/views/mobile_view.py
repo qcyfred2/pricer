@@ -54,7 +54,7 @@ class MobileView(View):
                 request.session.set_expiry(SESSION_EXPIER_TIME)
                 params = parse_get_params(request)
                 product_id = int(params['product_id'][0])
-                quantity = int(params['quantity'][0])
+                quantity = float(params['quantity'][0])
                 year = int(params['year'][0])
 
                 prod_df = self._prod_serv.get_all_prods_df(idx_col='产品编号')
@@ -63,7 +63,7 @@ class MobileView(View):
 
                 # if 数量为0，就把该商品从cart中去掉，并更新session
                 # else， 查询所有商品的价格，计算价格（单项 & 购物车中所有商品的价格）
-                if quantity > 0.5:  # 数量大于零
+                if quantity > 0.001:  # 数量大于零
 
                     px_dict = self._prod_serv.calc_prod_item_price(prod_df, product_id, quantity, year)
 
