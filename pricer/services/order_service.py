@@ -28,6 +28,7 @@ class OrderService:
     # 网页上显示table
     def get_all_orders_df(self):
         return self._order_dao.get_all_orders_df()
+
     # 网页上显示table
 
     def get_order_detail_df_by_order_id(self, order_id):
@@ -94,8 +95,8 @@ class OrderService:
         # 修改 df_to_gen_xlsx 的存储服务的投标报价（总价 / 数量 / year）
         storage_df_idx = df_to_gen_xlsx.query("产品类别 == '存储服务'").index
         df_to_gen_xlsx.loc[storage_df_idx, '投标报价'] = df_to_gen_xlsx.loc[storage_df_idx, '单项价格'] \
-            / df_to_gen_xlsx.loc[storage_df_idx, '预定数量'] \
-            / df_to_gen_xlsx.loc[storage_df_idx, '预定年限']
+                                                     / df_to_gen_xlsx.loc[storage_df_idx, '预定数量'] \
+                                                     / df_to_gen_xlsx.loc[storage_df_idx, '预定年限']
 
         new_xlsx_name = 'order_{order_id}.xlsx'.format(order_id=order_id)
         new_xlsx_path = ORDER_OUTPUT_XLSX_DIR_PATH + new_xlsx_name
@@ -126,43 +127,47 @@ class OrderService:
         subject = '新订单_{organization}_{order_id}'.format(**order_info)
         images = []
 
+        content = """
+                <b>尊敬的客户：</b><br/><br/>
+                您好！<br/>
+                您提交的订单我们已收到，我们将尽快与您联系！<br/>
+                祝您工作顺利、生活愉快！
+                <br/><br/>
+                <b>中国联通广州市分公司</b><br/>
+                <b>{today_yyyymmdd}</b><br/><br/>
+
+                <b>政务云订单</b><br/>
+                订单编号 {order_id}<br/>
+                单位名称 {organization}<br/>
+                联系人 {name}<br/>
+                联系方式 {tel}<br/>
+                电子邮箱 {email}<br/>
+                订单金额 {total_price}<br/>
+                下单时间 {order_datetime}<br/>
+                注：因小数点精度限制，实际价格可能有所出入，许可等产品的预定期限，均以最终合同为准。<br/><br/>
+                <b>自动邮件，请勿回复</b>
+                """.format(order_id=order_id, name=order_info['name'], tel=order_info['tel'],
+                           email=order_info['email'], total_price=order_info['total_price'],
+                           order_datetime=order_info['order_datetime'],
+                           organization=order_info['organization'],
+                           today_yyyymmdd=str(datetime.datetime.now())[:10])
+        attachments = [self.new_xlsx_path]
+
+        cc_addrs = list(
+            set([order_info['admin_user']['电子邮箱']] + RECEIVERS))
+
         try:
-            content = """
-                    <b>尊敬的客户：</b><br/><br/>
-                    您好！<br/>
-                    您提交的订单我们已收到，我们将尽快与您联系！<br/>
-                    祝您工作顺利、生活愉快！
-                    <br/><br/>
-                    <b>中国联通广州市分公司</b><br/>
-                    <b>{today_yyyymmdd}</b><br/><br/>
-
-                    <b>政务云订单</b><br/>
-                    订单编号 {order_id}<br/>
-                    单位名称 {organization}<br/>
-                    联系人 {name}<br/>
-                    联系方式 {tel}<br/>
-                    电子邮箱 {email}<br/>
-                    订单金额 {total_price}<br/>
-                    下单时间 {order_datetime}<br/>
-                    注：因小数点精度限制，实际价格可能有所出入，许可等产品的预定期限，均以最终合同为准。<br/><br/>
-                    <b>自动邮件，请勿回复</b>
-                    """.format(order_id=order_id, name=order_info['name'], tel=order_info['tel'],
-                               email=order_info['email'], total_price=order_info['total_price'],
-                               order_datetime=order_info['order_datetime'],
-                               organization=order_info['organization'],
-                               today_yyyymmdd=str(datetime.datetime.now())[:10])
-            attachments = [self.new_xlsx_path]
-
-            cc_addrs = list(
-                set([order_info['admin_user']['电子邮箱']] + RECEIVERS))
-
             # 发给客户，抄给客户经理（和我，但是126邮箱自己抄给自己收不到……）
             send_email([order_info['email']], subject, content,
                        images, attachments, cc=cc_addrs)
-            # 发给管理员和客户经理 （为什么抄送发送不成功）
-            send_email(cc_addrs, subject, content,
-                       images, attachments, cc=None)
-            logger.info('订单确认邮件发送成功')
         except Exception as e:
-            logger.error('订单确认邮件发送失败')
-            logger.error(e)
+            logger.info('订单确认客户邮件发送失败')
+            logger.info('%s, %s' % (order_info['email'], self.new_xlsx_path))
+            logger.info(e)
+        try:
+            # 发给管理员和客户经理 （为什么抄送发送不成功）
+            send_email(cc_addrs, subject, content, images, attachments, cc=None)
+        except Exception as e:
+            logger.info('订单确认管理员邮件发送失败')
+            logger.info('%s' % self.new_xlsx_path)
+            logger.info(e)
