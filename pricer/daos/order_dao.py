@@ -15,7 +15,7 @@ class OrderDao(BaseDao):
 
     # 手机网页上查询订单
     def get_all_orders_by_admin_id(self, admin_id):
-        if admin_id <= 100:  # 系统管理员编号
+        if admin_id > 100:  # 不是系统管理员编号
             sql = """SELECT * FROM v_orders WHERE 客户经理编号 = {admin_id};""".format(
                 admin_id=admin_id)
         else:  # 系统管理员能查询所有订单
