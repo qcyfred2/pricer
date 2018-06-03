@@ -8,7 +8,7 @@ from pricer.services.product_service import ProductService
 from pricer.services.admin_service import AdminService
 from pricer.services.order_service import OrderService
 import urllib.parse as urlparse
-from pricer.utils.utils import parse_get_params, get_session_cart
+from pricer.utils.django_utils import parse_get_params, get_session_cart
 import json
 from pricer.constants import TOTAL_PRICE, TOTAL_CATEGORY_NUMBER, TOTAL_NUMBER, INIT_CART, SESSION_EXPIER_TIME
 import pandas as pd

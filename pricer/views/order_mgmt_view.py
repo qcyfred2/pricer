@@ -6,7 +6,7 @@ from django.views import View
 from pricer.services.product_service import ProductService
 from pricer.services.order_service import OrderService
 import urllib.parse as urlparse
-from pricer.utils.utils import parse_get_params
+from pricer.utils.django_utils import parse_get_params
 import json
 import pandas as pd
 import numpy as np
