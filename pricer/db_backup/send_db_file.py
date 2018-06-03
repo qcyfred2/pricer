@@ -1,24 +1,19 @@
 import os
-from pricer.utils.email_utils import send_email
-import time
 import datetime
-from pricer.constants import RECEIVERS
+from qcy.email_utils.email_utils import send_email
 
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/db_backup/zip/'
 
-while 1:
+def start_task(*args, **kwargs):
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + '/db_backup/zip/'
 
-    now_str = str(datetime.datetime.now())[:19].split(' ')[1]
-    print(now_str)
+    files = [x for x in os.listdir(base_dir) if x != '__init__.py']
+    new_file = files[-1]
 
-    if now_str == '22:10:00':
-        files = [x for x in os.listdir(base_dir) if x != '__init__.py']
-        new_file = files[-1]
+    sql_path = base_dir + new_file
+    send_email(receivers=['qcy_1993@126.com', 'liaorx3@chinaunicom.cn'], subject='数据库备份',
+               content='%s<br/>数据库SQL文件' % str(datetime.datetime.now()), images=[], attachments=[sql_path],
+               cc=None)
 
-        sql_path = base_dir + new_file
-        send_email(receivers=RECEIVERS, subject='数据库备份',
-                   # send_email(receivers=['qcy_1993@126.com'], subject='数据库备份',
-                   content='%s<br/>数据库SQL文件' % str(datetime.datetime.now()), images=[], attachments=[sql_path],
-                   cc=None)
 
-    time.sleep(1)
+if __name__ == '__main__':
+    start_task()
