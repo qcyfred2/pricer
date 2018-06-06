@@ -32,6 +32,9 @@
                     <input type="text" name="email" id="email" placeholder="客户E-mail" />
                 </p>
                 <p class="list-group-item-text">
+                    <input type="addinfo" name="remark" id="remark" placeholder="订单备注" />
+                </p>
+                <p class="list-group-item-text">
                     <input type="submit" value="提交订单" onclick="return save_order()" />
                 </p>
                 <p class="" style="font-size: 10pt; ">
@@ -78,11 +81,19 @@
             // return false;
         }
 
-        // 留言，不超过128字？ 和db设计有关
+        // 对方单位名称，不超过128字？ 和db设计有关
         var organization = $("#organization").val();
         if (organization.length > 128 || organization.length <= 0) {
             return false;
         }
+
+        // 订单备注
+        var remark = $("input:text[name='remark']").val();
+        if (remark.length <= 0 || remark.length > 128) {
+            remark = '';
+            // return false;
+        }
+
 
         var form = new FormData();
         form.append("csrfmiddlewaretoken", '{{ csrf_token }}');
@@ -90,6 +101,7 @@
         form.append("email", email);
         form.append("tel", tel);
         form.append("organization", organization);
+        form.append("remark", remark);
 
         $.ajax({
             url: '{{nginx_prefix}}/mobile/save_order/',

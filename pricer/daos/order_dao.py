@@ -109,8 +109,8 @@ class OrderDao(BaseDao):
 
                 sql = """
                         INSERT INTO t_order_info ( 订单状态, 订单价格, 联系人, 联系方式, 电子邮箱, 下单时间, 下单员编号,
-                          单位名称 ) VALUES ( '未处理', {total_price}, '{name}', '{tel}', '{email}', 
-                          '{order_datetime}', {admin_user_id}, '{organization}') ;""".format(**params)
+                          单位名称, 备注 ) VALUES ( '未处理', {total_price}, '{name}', '{tel}', '{email}', 
+                          '{order_datetime}', {admin_user_id}, '{organization}', '{remark}') ;""".format(**params)
 
                 cursor.execute(sql)
 

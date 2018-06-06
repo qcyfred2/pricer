@@ -233,6 +233,7 @@ class MobileView(View):
             order_dict['name'] = request.POST.get('name', '')
             order_dict['email'] = request.POST.get('email', '')
             order_dict['organization'] = request.POST.get('organization', '')
+            order_dict['remark'] = request.POST.get('remark', '')
 
             cart = get_session_cart(request)
             order_dict['cart'] = cart
