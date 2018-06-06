@@ -32,7 +32,7 @@
                     <input type="text" name="email" id="email" placeholder="客户E-mail" />
                 </p>
                 <p class="list-group-item-text">
-                    <input type="addinfo" name="remark" id="remark" placeholder="订单备注" />
+                    <textarea type="addinfo" name="remark" id="remark" placeholder="订单备注"></textarea>
                 </p>
                 <p class="list-group-item-text">
                     <input type="submit" value="提交订单" onclick="return save_order()" />
@@ -88,7 +88,7 @@
         }
 
         // 订单备注
-        var remark = $("input:text[name='remark']").val();
+        var remark = $("#remark").val();
         if (remark.length <= 0 || remark.length > 128) {
             remark = '';
             // return false;

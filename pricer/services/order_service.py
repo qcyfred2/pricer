@@ -143,8 +143,8 @@ class OrderService:
                 联系方式 {tel}<br/>
                 电子邮箱 {email}<br/>
                 订单金额 {total_price}<br/>
-                下单时间 {order_datetime}<br/>
                 订单备注 {remark}<br/>
+                下单时间 {order_datetime}<br/>
                 注：因小数点精度限制，实际价格可能有所出入，许可等产品的预定期限，均以最终合同为准。<br/><br/>
                 <b>自动邮件，请勿回复</b>
                 """.format(order_id=order_id, name=order_info['name'], tel=order_info['tel'],

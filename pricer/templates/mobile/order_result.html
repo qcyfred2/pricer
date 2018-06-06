@@ -44,6 +44,9 @@
                     订单价格 {{order_info.订单价格 | floatformat:"2"}} 元
                 </p>
                 <p class="list-group-item-text">
+                    订单备注 {{order_info.备注 }}
+                </p>
+                <p class="list-group-item-text">
                     下单时间 {{order_info.下单时间 | date:"Y-m-d H:i:s"}}
                 </p>
                 <hr/>
@@ -59,9 +62,6 @@
                     客户经理邮箱 {{order_info.客户经理邮箱}}
                 </p>
 
-                <p class="list-group-item-text">
-                    订单备注 {{order_info.备注}}
-                </p>
             </span>
             {% endfor %}
             <br/>
