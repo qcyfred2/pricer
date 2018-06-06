@@ -16,7 +16,7 @@ def start_task(*args, **kwargs):
 
     new_folder_dict = dict()
 
-    for a, b, c, d in zip(df['订单编号'], df['订单状态'], df['单位名称'], df['下单时间']):
+    for a, b, c, d in zip(df['订单编号'], df['订单状态'], df['下单时间'], df['单位名称']):
         new_folder_dict[a] = str(a) + '_' + b + '_' + c.strftime('%Y%m%d_%H%M%S') + '_' + d
 
     for k, v in new_folder_dict.items():
