@@ -6,4 +6,10 @@
 *.exe
 *.bak
 *.docx
+*.doc
+*.xls
+*.xlsx
+*.xlsm
+*.ppt
+*.pdf
 db.sqlite3
