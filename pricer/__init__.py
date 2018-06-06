@@ -2,7 +2,7 @@
 import yaml
 from pricer.settings import BASE_DIR
 
-with open(BASE_DIR+'/pricer/settings.yaml') as f:
+with open(BASE_DIR+'/pricer/settings.yaml', encoding='utf-8') as f:
     setting_str = f.read()
     f.close()
     setting_dict = yaml.load(setting_str)

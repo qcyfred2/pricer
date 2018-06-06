@@ -3,7 +3,8 @@
 from pricer.daos.order_dao import OrderDao
 from pricer.daos.product_dao import ProductDao
 import pandas as pd
-from pricer.constants import (ORDER_OUTPUT_XLSX_DIR_PATH,
+import os
+from pricer.constants import (CONTRACT_DIR_PATH,
                               ORDER_OUTPUT_XLSX_DIR_PATH,
                               ORDER_XLSX_TEMPLATE,
                               RECEIVERS)
@@ -64,7 +65,24 @@ class OrderService:
 
     def _save_xlsx_send_mail(self, order_id, order_info):
 
-        # 1. 生成Excel订单
+        # 1. 生成对应的文件夹
+        try:
+            old_folder_dict = {int(x.split('_')[0]): x for x in os.listdir(CONTRACT_DIR_PATH)}
+            new_folder_path = CONTRACT_DIR_PATH + '%d_%s' % (order_id, order_info['organization'])
+            if order_id not in old_folder_dict:
+                os.mkdir(new_folder_path)
+            else:
+                if old_folder_dict[order_id] == new_folder_path:
+                    pass
+                else:
+                    os.rename(CONTRACT_DIR_PATH + old_folder_dict[order_id], new_folder_path)
+
+        except Exception as e:
+            logger.info('新合同文件夹生成失败 %d' % order_id)
+            logger.error(e)
+
+
+        # 2. 生成Excel订单
         try:
             logger.info('正在保存订单excel文件')
             self._save_xlsx(order_id)
@@ -73,7 +91,7 @@ class OrderService:
             logger.info('订单excel文件保存失败 %d' % order_id)
             logger.error(e)
 
-        # 2. 发送邮件
+        # 3. 发送邮件
         try:
             logger.info('正在发送邮件')
             self._send_email_order_xlsx(order_id, order_info)
