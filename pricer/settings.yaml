@@ -16,3 +16,6 @@ database:
 app_info:
   app_name:
   app_host:
+
+contract_info:
+  path:

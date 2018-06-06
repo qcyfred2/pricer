@@ -22,6 +22,8 @@ app_host = app_info.get('app_host')
 ACTIVATE_URL_PREFIX = 'http://{host}/{app_name}/mobile/activate/'.format(
     host=app_host, app_name=APP_NAME)
 
+# 合同文件夹路径
+CONTRACT_DIR_PATH = setting_dict.get('contract_info').get('path')
 
 # 订单模板
 # excel文件
