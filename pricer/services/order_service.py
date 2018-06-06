@@ -67,8 +67,12 @@ class OrderService:
 
         # 1. 生成对应的文件夹
         try:
+            dt_str = pd.to_datetime(order_info['order_datetime']).strftime('%Y%m%d_%H%M%S')
             old_folder_dict = {int(x.split('_')[0]): x for x in os.listdir(CONTRACT_DIR_PATH)}
-            new_folder_path = CONTRACT_DIR_PATH + '%d_%s' % (order_id, order_info['organization'])
+            new_folder_path = CONTRACT_DIR_PATH + \
+                              '{order_id}_{status}_{organ}_{dt_str}'.format(order_id=order_id, status='未处理',
+                                                                            organ=order_info['organization'],
+                                                                            dt_str=dt_str)
             if order_id not in old_folder_dict:
                 os.mkdir(new_folder_path)
             else:
@@ -80,7 +84,6 @@ class OrderService:
         except Exception as e:
             logger.info('新合同文件夹生成失败 %d' % order_id)
             logger.error(e)
-
 
         # 2. 生成Excel订单
         try:
