@@ -70,7 +70,7 @@ class OrderService:
             dt_str = pd.to_datetime(order_info['order_datetime']).strftime('%Y%m%d_%H%M%S')
             old_folder_dict = {int(x.split('_')[0]): x for x in os.listdir(CONTRACT_DIR_PATH)}
             new_folder_path = CONTRACT_DIR_PATH + \
-                              '{order_id}_{status}_{dt_str}_{organ}'.format(order_id=order_id, status='未处理',
+                              '{order_id}_{status}_{organ}_{dt_str}'.format(order_id=order_id, status='未处理',
                                                                             organ=order_info['organization'],
                                                                             dt_str=dt_str)
             if order_id not in old_folder_dict:
