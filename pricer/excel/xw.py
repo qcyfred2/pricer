@@ -25,7 +25,7 @@ DB_HOST = db_info['host']
 DB_PORT = db_info['port']
 DB_CHARSET = db_info['charset']
 
-N_CONTRACT_INFO = 10  # 合同的基本信息行数
+N_CONTRACT_INFO = 7  # 合同的基本信息行数
 BG_COLOR = (198, 224, 180)
 N_FORMULAR_RESERVED_COL = 10
 N_ALL_ORDERED_PRODUCTS_COL = 12
@@ -435,13 +435,19 @@ def save_contract_basic_info(order_id, two_or_three):
     wb = xw.Book.caller()
     sht = wb.sheets[5]  # Sheet：生成合同
 
-    if two_or_three == 'two':
-        df = pd.DataFrame(sht.range('A3').expand(
-            'table').value, columns=['参数名', '参数值'])
-    else:
-        df = pd.DataFrame(sht.range('G3').expand(
-            'table').value, columns=['参数名', '参数值'])
-    df['订单编号'] = order_id
+    try:
+        if two_or_three == 'two':
+            df = pd.DataFrame(sht.range('A5').expand(
+                'table').value, columns=['参数名', '参数值'])
+        else:
+            df = pd.DataFrame(sht.range('G5').expand(
+                'table').value, columns=['参数名', '参数值'])
+        df['订单编号'] = order_id
+    except Exception as e:
+        print('合同信息不全？')
+        print(e)
+        return
+
     if len(df) < N_CONTRACT_INFO:
         print('合同基本信息不全')
     else:
@@ -471,97 +477,20 @@ def get_contract_basic_info(order_id, two_or_three):
             order_id=order_id)
         df = pd.read_sql(sql, conn, index_col='订单编号')
         if len(df) < N_CONTRACT_INFO:
-            print('无合同信息')
+            if two_or_three == 'two':
+                number_of_params = len(sht.range('A5').expand('down').value)
+                sht.range('B5:B%d' % (5+number_of_params-1)).value = '待定'
+            else:
+                number_of_params = len(sht.range('G5').expand('down').value)
+                sht.range('H5:H%d' % (5+number_of_params-1)).value = '待定'
         else:
             if two_or_three == 'two':
-                sht.range('A3').expand('table').value = None
-                sht.range('A3').expand('table').value = df.values
+                sht.range('A5').expand('table').value = None
+                sht.range('A5').value = df.values
             else:
-                sht.range('G3').expand('table').value = None
-                sht.range('G3').expand('table').value = df.values
+                sht.range('G5').expand('table').value = None
+                sht.range('G5').value = df.values
     except Exception as e:
         print(e)
     finally:
         conn.close()
-
-    #
-    # engine = _get_engine()
-    # engine.execute("""delete from t_contract where 订单编号 = {order_id}""".format(order_id=order_id))
-    # df.to_sql('t_contract', engine, index=False, if_exists='append')
-    # engine.dispose()
-
-# def get_final_order_by_order_id(order_id):
-#     engine = _get_engine()
-#     sql = """select * from t_order_final where 订单编号 = {order_id}""".format(
-#         order_id=order_id)
-#     df = pd.read_sql(sql, engine, index_col='订单编号')
-#     engine.dispose()
-#     wb = xw.Book.caller()
-#     sht = wb.sheets[4]
-#     sht.range('A1:Z1000').value = None
-#     sht.range('A1').value = df
-
-
-# # 把最终订单保存至数据库
-# def save_final_order_into_database(order_id):
-
-#     engine = _get_engine()
-
-#     # 订单表基本信息
-#     sql = """SELECT * FROM t_order_info WHERE 订单编号 = {order_id};""".format(
-#         order_id=order_id)
-#     order_df = pd.read_sql(sql, engine, index_col='订单编号')
-#     order_dict = dict(order_df.T)[order_id]
-
-#     # 客户经理基本信息
-#     admin_id = order_dict['下单员编号']
-#     sql = """select * from t_admin where 编号 = {admin_id};""".format(
-#         admin_id=admin_id)
-#     account_manager_df = pd.read_sql(sql, engine, index_col='编号')
-#     account_manager_dict = dict(account_manager_df.T)[admin_id]
-
-#     # 读取最终订单的各产品信息
-#     wb = xw.Book.caller()
-#     sht = wb.sheets[1]
-#     rng = sht.range('A1').expand('table')
-
-#     # 构造final_order表的信息
-#     order_cpnt_df = pd.DataFrame(rng.value, columns=rng.value[0]).iloc[1:, :]
-
-#     order_cpnt_df['订单编号'] = order_id
-#     order_cpnt_df['下单时间'] = order_dict['下单时间']
-#     order_cpnt_df['单位名称'] = order_dict['单位名称']
-#     order_cpnt_df['联系人'] = order_dict['联系人']
-#     order_cpnt_df['联系方式'] = order_dict['联系方式']
-#     order_cpnt_df['电子邮箱'] = order_dict['电子邮箱']
-#     order_cpnt_df['订单金额'] = float(order_cpnt_df['单项价格'].sum())
-#     order_cpnt_df['客户经理'] = account_manager_dict['姓名']
-#     order_cpnt_df['客户经理手机'] = account_manager_dict['联系方式']
-#     order_cpnt_df['客户经理邮箱'] = account_manager_dict['电子邮箱']
-#     order_cpnt_df['确认时间'] = str(datetime.datetime.now())
-
-#     sql = """select * from t_order_final limit 0, 1;"""
-#     order_final_df = pd.read_sql(sql, engine)
-#     order_cpnt_df = order_cpnt_df[order_final_df.columns]
-
-#     # TODO: engine并不能这样这样开启事务！！
-#     # TODO: 用原生态cursor！
-#     try:
-#         engine.execute("""begin;""")
-
-#         sql = """delete from t_order_final where 订单编号 = {order_id}""".format(
-#             order_id=order_id)
-#         engine.execute(sql)
-
-#         order_cpnt_df.to_sql('t_order_final', engine,
-#                              index=False, if_exists='append')
-#         sql = """update t_order_info set 订单状态 = '已确认' where 订单编号 = {order_id}""".format(
-#             order_id=order_id)
-#         engine.execute(sql)
-
-#         engine.execute("""commit;""")
-#     except Exception as e:
-#         print(e)
-#         engine.execute("""rollback;""")
-#     finally:
-#         engine.dispose()
