@@ -6,7 +6,7 @@
 <host>127.0.0.1</host>
 <user>u_admin</user>
 <pwd>uq+wMra0Nw==</pwd>
-<port>3306</port>
+<port>3800</port>
 <compressed>1</compressed>
 <ssl>0</ssl>
 <sslauth>0</sslauth>

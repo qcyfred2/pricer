@@ -9,7 +9,7 @@ DB_USER = ''
 DB_PWD = ''
 DB_NAME = ''
 DB_HOST = ''
-DB_PORT = 3306
+DB_PORT = 3800
 DB_CHARSET = 'utf8'
 
 DB_URL_INFO = 'mysql+pymysql://%(user)s:%(password)s@%(host)s:%(port)d/%(database)s?charset='+DB_CHARSET
